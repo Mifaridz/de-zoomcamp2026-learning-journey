@@ -124,7 +124,7 @@ Hari ini saya berhasil bikin pipeline Python sederhana yang bisa nerima argumen 
 
 # 🐳03-Dockerizing the Data Pipeline
 
-**Topik:** _Bridging Python Environment & Infrastructure_
+> **Topik:** _Bridging Python Environment & Infrastructure_
 
 ### Analogi Sederhana
 
@@ -151,6 +151,7 @@ Dockerfile adalah urutan instruksi yang dibaca Docker dari atas ke bawah. Beriku
 ### Optimasi "Pro": Mengapa Tidak Sekali Copy?
 
 Ini poin paling teknis yang saya pelajari. Di Dockerfile, saya melakukan **COPY dua kali**. Kenapa?
+![alt text](https://github.com/Mifaridz/de-zoomcamp2026-learning-journey\01-docker-terraform\notes\note-image/copy2times.png?raw=true)
 
 1. **Layer Caching (Efisiensi Waktu):**
 
@@ -181,5 +182,81 @@ Setelah Dockerfile siap, ini langkah yang saya lakukan di terminal:
 Memasukkan pipeline ke dalam Docker merupakan **standarisasi** untuk setiap tugas "_Image_" atau project yang akan dijalankan. Dengan teknik _Layer Caching_, proses _development_ jadi jauh lebih cepat.
 
 **Insight Penting:** Penggunaan `ENTRYPOINT` membuat container berperilaku seperti aplikasi _executable_. Kita tinggal panggil nama image-nya dan masukkan argumen yang kita mau di belakangnya.
+
+---
+
+Ini adalah materi yang sangat krusial karena kita mulai berpindah dari sekadar mengolah file teks ke **Sistem Manajemen Basis Data (DBMS)**. Sebagai lulusan IT, saya merasa ini jauh lebih rapi dibanding cara lama (seperti install XAMPP manual) karena tidak ada lagi drama sisa-sisa instalasi yang mengotori OS.
+
+Berikut adalah catatan belajar saya untuk materi **PostgreSQL di dalam Docker**:
+
+---
+
+# 🐘 Catatan Belajar: PostgreSQL in Docker
+
+**Topik:** _Database Infrastructure & Data Persistence_
+
+### Konsep: Persistence & Environment
+
+Di sini saya belajar tentang cara yang baik untuk mengelola database di container.
+
+- **Environment Variables (`-e`)**: Cara menyuntikkan konfigurasi (user, pass, nama DB) tanpa bongkar pasang Image.
+- **Port Mapping (`-p`)**: Jembatan antara dunia luar (laptop saya) dan dunia dalam container.
+- _Highlight:_ `5432:5432` artinya "Ketuk pintu 5432 di laptop, otomatis masuk ke 5432 di container".
+
+- **Persistence (Bind Mount)**: Ini kuncinya! Saya menggunakan `-v` untuk memetakan folder di laptop ke folder data di container.
+- _Poin Penting:_ **Kiri (Laptop/Host) : Kanan (Container)**. Apa yang disimpan di Kanan, fisiknya ada di Kiri. Jadi kalau container dihapus, data di folder laptop tetap aman.
+
+---
+
+### Workflow: Menghidupkan Database
+
+Langkah praktis yang saya jalankan untuk membangun "rumah" bagi data nanti:
+
+1. **Siapkan Folder Fisik:** `mkdir ny_taxi_postgres_data`
+2. **Jalankan Container (Postgres 16-alpine):**
+
+```bash
+docker run -it --rm \
+  -e POSTGRES_USER="root" \
+  -e POSTGRES_PASSWORD="root" \
+  -e POSTGRES_DB="ny_taxi" \
+  -v "$(pwd)/ny_taxi_postgres_data:/var/lib/postgresql/data" \
+  -p 5432:5432 \
+  postgres:16-alpine
+
+```
+
+3. **Install Tool Klien (pgcli):**
+   Saya menggunakan `uv add --dev pgcli`.
+
+- **Kenapa pakai `--dev`?** Agar library ini cuma ada di laptop saya untuk kebutuhan _testing_, tapi tidak akan ikut terinstal saat nanti dideploy ke server produksi. Sangat efisien!
+
+---
+
+### Jebakan Batman: Localhost vs Docker Network
+
+Ada satu _insight_ penting yang saya catat:
+
+- Saat ini saya mengakses database pakai `localhost` karena `pgcli` jalan langsung di laptop.
+- **Tapi nanti**, kalau script Python saya juga sudah masuk ke dalam Docker, `localhost` tidak akan berfungsi lagi. Bagi container, `localhost` adalah dirinya sendiri, bukan database-nya.
+- _Solusi ke depan:_ Harus pakai **Docker Network** supaya antar container bisa saling mengobrol pakai nama service-nya.
+
+---
+
+### Tabel Perintah & SQL Check
+
+| Perintah                        | Deskripsi                                     |
+| ------------------------------- | --------------------------------------------- |
+| `uv run pgcli -h localhost ...` | Masuk ke terminal database secara interaktif. |
+| `\dt`                           | Cek tabel yang ada (Data Definition).         |
+| `CREATE TABLE...`               | Membuat skema awal untuk menampung data.      |
+
+---
+
+### 📌 Summary (Rangkuman Akhir)
+
+Inti dari materi ini adalah **Pemisahan antara Compute dan Storage**. Container boleh mati atau diganti kapan saja (`--rm`), asalkan datanya sudah kita ikat ke folder lokal lewat **Bind Mount**. Dengan menggunakan `uv --dev`, manajemen _tools_ pembantu (seperti `pgcli`) juga jadi jauh lebih bersih di mata seorang _developer_.
+
+**Insight Pribadi:** Ternyata mengelola database bisa semudah menjalankan satu perintah Docker. Tidak perlu install macem-macem secara permanen di Windows/Mac.
 
 ---
