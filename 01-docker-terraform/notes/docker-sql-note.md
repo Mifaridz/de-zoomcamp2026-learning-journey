@@ -78,7 +78,7 @@ Docker bukan cuma soal instalasi software, tapi soal cara kita membungkus seluru
 
 > **Topik:** _Virtual Environments & Build My First Pipeline_
 
-### 🛠️ Setting Up "Kandang" (Environment)
+### Setting Up "Kandang" (Environment)
 
 Masalah klasik pada saat menjalakan python dengan project yang berbeda adalah seringnya _library_ yang tabrakan. Jadi saat akan membuat sebuah project alahkah baiknya melakukan setting Environment terlebih dahulu dan list _library_ apa saja yang akan digunakan.
 
@@ -93,7 +93,7 @@ Masalah klasik pada saat menjalakan python dengan project yang berbeda adalah se
 
 ---
 
-### 🚀 Anatomy of a Pipeline
+### Anatomy of a Pipeline
 
 Saya belajar kalau pipeline itu nggak harus ribet. Esensinya cuma tiga: **Input → Proses → Output**.
 
@@ -106,7 +106,7 @@ Saya belajar kalau pipeline itu nggak harus ribet. Esensinya cuma tiga: **Input 
 
 ---
 
-### 📄 Data Format: Parquet is King!
+### Data Format: Parquet is King!
 
 Dulu taunya cuma CSV, sekarang baru ngeh kenapa orang DE suka **Parquet**.
 
@@ -119,5 +119,67 @@ Dulu taunya cuma CSV, sekarang baru ngeh kenapa orang DE suka **Parquet**.
 ### 📌 Summary (Rangkuman Akhir)
 
 Hari ini saya berhasil bikin pipeline Python sederhana yang bisa nerima argumen terminal. Inti dari materi ini bukan cuma soal nulis kode, tapi soal **standardisasi**. Pake `uv` buat ngatur dependensi, pake `sys.argv` buat bikin script fleksibel, dan milih format `Parquet` buat efisiensi.
+
+---
+
+# 🐳03-Dockerizing the Data Pipeline
+
+**Topik:** _Bridging Python Environment & Infrastructure_
+
+### Analogi Sederhana
+
+Saya menyimpulkan proses ini dalam dua tahap besar:
+
+- **`docker build` (Proses Kompilasi):** Mengubah _source code_ + _environment_ (`uv`) menjadi satu paket Image siap pakai.
+- **`docker run` (Proses Eksekusi):** Menjalankan "paket" tersebut di mesin mana saja.
+
+---
+
+### Anatomi Dockerfile (Si "Resep Masakan")
+
+Dockerfile adalah urutan instruksi yang dibaca Docker dari atas ke bawah. Berikut komponen kuncinya:
+
+- **`FROM`**: Bahan dasar (OS + Python).
+- **`WORKDIR`**: Menentukan folder kerja di dalam container (seperti `cd`).
+- **`COPY`**: Memasukkan file dari laptop ke dalam container.
+- **`RUN`**: Perintah eksekusi saat pembuatan image (misal: install library).
+- **`ENV`**: Setting variabel lingkungan (seperti PATH).
+- **`ENTRYPOINT`**: Perintah otomatis yang jalan saat container dinyalakan.
+
+---
+
+### Optimasi "Pro": Mengapa Tidak Sekali Copy?
+
+Ini poin paling teknis yang saya pelajari. Di Dockerfile, saya melakukan **COPY dua kali**. Kenapa?
+
+1. **Layer Caching (Efisiensi Waktu):**
+
+- Saya copy `pyproject.toml` dan `uv.lock` duluan, lalu jalankan `uv sync`.
+- Baru setelah itu copy `pipeline.py`.
+- **Hasilnya:** Kalau saya cuma ubah kode di `pipeline.py`, Docker nggak perlu download ulang library Pandas/Pyarrow (pakai _cache_). Build ulang jadi cuma hitungan detik!
+
+2. **Multi-stage Copy:**
+
+- Menggunakan `COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/`.
+- Tujuannya "meminjam" file binary `uv` dari image resminya tanpa harus install manual yang ribet. Image jadi lebih kecil dan bersih.
+
+---
+
+### Workflow Eksekusi
+
+Setelah Dockerfile siap, ini langkah yang saya lakukan di terminal:
+
+| Langkah   | Perintah                                          | Catatan Saya                                                         |
+| --------- | ------------------------------------------------- | -------------------------------------------------------------------- |
+| **Build** | `docker build -t pipeline-data:v1 .`              | Jangan lupa **titik (.)** di akhir! Itu artinya folder saat ini.     |
+| **Run**   | `docker run -it --rm pipeline-data:v1 2026-01-18` | `2026-01-18` akan ditangkap sebagai argumen oleh script Python saya. |
+
+---
+
+### 📌 Summary (Rangkuman Akhir)
+
+Memasukkan pipeline ke dalam Docker merupakan **standarisasi** untuk setiap tugas "_Image_" atau project yang akan dijalankan. Dengan teknik _Layer Caching_, proses _development_ jadi jauh lebih cepat.
+
+**Insight Penting:** Penggunaan `ENTRYPOINT` membuat container berperilaku seperti aplikasi _executable_. Kita tinggal panggil nama image-nya dan masukkan argumen yang kita mau di belakangnya.
 
 ---
