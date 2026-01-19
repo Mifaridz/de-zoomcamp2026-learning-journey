@@ -148,10 +148,10 @@ Dockerfile adalah urutan instruksi yang dibaca Docker dari atas ke bawah. Beriku
 
 ---
 
-### Optimasi "Pro": Mengapa Tidak Sekali Copy?
+### Optimasi "Pro"
 
 Ini poin paling teknis yang saya pelajari. Di Dockerfile, saya melakukan **COPY dua kali**. Kenapa?
-![alt text](https://github.com/Mifaridz/de-zoomcamp2026-learning-journey\01-docker-terraform\notes\note-image/copy2times.png?raw=true)
+![alt text](https://github.com/Mifaridz/de-zoomcamp2026-learning-journey/blob/main/01-docker-terraform/notes/note-image/copy2times.png?raw=true)
 
 1. **Layer Caching (Efisiensi Waktu):**
 
@@ -177,7 +177,7 @@ Setelah Dockerfile siap, ini langkah yang saya lakukan di terminal:
 
 ---
 
-### 📌 Summary (Rangkuman Akhir)
+### 📌 Summary
 
 Memasukkan pipeline ke dalam Docker merupakan **standarisasi** untuk setiap tugas "_Image_" atau project yang akan dijalankan. Dengan teknik _Layer Caching_, proses _development_ jadi jauh lebih cepat.
 
@@ -185,15 +185,9 @@ Memasukkan pipeline ke dalam Docker merupakan **standarisasi** untuk setiap tuga
 
 ---
 
-Ini adalah materi yang sangat krusial karena kita mulai berpindah dari sekadar mengolah file teks ke **Sistem Manajemen Basis Data (DBMS)**. Sebagai lulusan IT, saya merasa ini jauh lebih rapi dibanding cara lama (seperti install XAMPP manual) karena tidak ada lagi drama sisa-sisa instalasi yang mengotori OS.
+# 🐘 04-PostgreSQL in Docker
 
-Berikut adalah catatan belajar saya untuk materi **PostgreSQL di dalam Docker**:
-
----
-
-# 🐘 Catatan Belajar: PostgreSQL in Docker
-
-**Topik:** _Database Infrastructure & Data Persistence_
+> **Topik:** _Database Infrastructure & Data Persistence_
 
 ### Konsep: Persistence & Environment
 
