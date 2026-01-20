@@ -1,7 +1,6 @@
 # 🐳 01-Introduction to Docker
 
 > **Topik:** Containerization Fundamentals
-> **Konteks:** Data Engineering Infrastructure
 
 ## Konsep Utama (Core Concepts)
 
@@ -70,7 +69,7 @@ docker run -it \
 
 Docker bukan cuma soal instalasi software, tapi soal cara kita membungkus seluruh environment kerja supaya rapi. Poin pentingnya adalah penggunaan _Image_ untuk menghemat space dan selalu pakai flag _--rm_ pas lagi testing supaya sampah container nggak numpuk di laptop.
 
-> **Note:** _Docker memisahkan antara compute (container) dan storage (volume). Ini adalah prinsip dasar infrastruktur data yang modern._
+> **📝 Note:** _Docker memisahkan antara compute (container) dan storage (volume). Ini adalah prinsip dasar infrastruktur data yang modern._
 
 ---
 
@@ -521,7 +520,7 @@ Berikut adalah catatan penutup saya untuk Modul 1, fokus pada efisiensi dan otom
 
 ---
 
-# 🎼 09- Docker Compose
+# 🎼 09-Docker Compose
 
 > **Topik:** _Infrastructure as Code (IaC) for Local Development_
 
@@ -569,5 +568,125 @@ Satu hal teknis yang saya pelajari: Docker Compose otomatis bikin nama network s
 ### 📌 Summary
 
 Modul 1 ini mengajarkan saya bahwa Data Engineering bukan cuma soal _coding_, tapi soal membangun **Infrastruktur yang Reproducible**. Dengan Docker Compose, saya punya "pabrik" data yang bisa saya bawa kemana saja, jalankan di OS apa saja, dan hasilnya akan selalu sama.
+
+---
+
+# 🔍 10-SQL Refresher for Data Engineers
+
+> **Topik:** _Joins, Data Quality, and Transformations (ETL Basics)_
+
+### Persiapan: Ingest Data Lookup
+
+Dalam dunia DE, tabel transaksi (seperti `yellow_taxi_trips`) biasanya ditemani oleh tabel referensi atau **Dimension Table**.
+
+- **Tugas DE:** Meng-ingest file `taxi_zone_lookup.csv` ke database agar kita bisa mengubah ID lokasi yang abstrak menjadi nama wilayah (Borough) dan zona yang bisa dimengerti manusia.
+
+---
+
+### 1. Strategi JOINS (The Connector)
+
+Data sering dipecah-pecah (_Normalized_) untuk efisiensi penyimpanan. Tugas kita adalah menggabungkannya kembali saat dibutuhkan.
+
+- **Explicit JOIN (Standar Industri):** Selalu gunakan keyword `JOIN ... ON`. Ini jauh lebih aman dan mudah dibaca daripada _Implicit Join_ (pakai koma).
+- **INNER vs LEFT JOIN:** \* **INNER:** Data hilang jika ID tidak cocok di kedua tabel.
+- **LEFT:** Menampilkan semua transaksi, meskipun data wilayahnya tidak ada (akan muncul `NULL`).
+- **Insight DE:** Dalam _pipeline_, kita lebih sering pakai `LEFT JOIN` agar data transaksi tetap aman dan tidak hilang hanya karena masalah referensi wilayah.
+
+---
+
+### 2. Data Quality Checks ( Peran Utama DE)
+
+Sebelum data dikonsumsi oleh tim Analyst, seorang DE wajib memastikan datanya bersih.
+
+- **Cek Inkonsistensi:** Gunakan query `NOT IN` untuk mencari apakah ada `LocationID` di tabel fakta yang tidak terdaftar di tabel zona.
+- **Tindak Lanjut:** Jika ditemukan data, artinya ada error pada saat _ingestion_ atau file referensi kita perlu di-update. Ini adalah bagian dari **Data Validation**.
+
+---
+
+### 3. Transformasi Data (The "T" in ETL)
+
+Ini adalah proses mengubah data mentah menjadi format yang siap lapor.
+
+- **Casting:** Mengubah `TIMESTAMP` (sampai detik) menjadi `DATE` menggunakan `CAST(kolom AS DATE)`. Ini sangat umum dilakukan untuk membuat laporan harian.
+- **Grouping Sederhana:** Menggunakan `GROUP BY 1, 2` (angka merujuk pada urutan kolom di `SELECT`). Sangat praktis untuk eksplorasi cepat.
+
+---
+
+### Tips Profesional untuk Data Engineer
+
+- **Aliasing:** Gunakan inisial yang jelas (misal: `t` untuk _trips_, `zpu` untuk _zone pickup_). Ini menyelamatkanmu saat query sudah melibatkan banyak tabel.
+- **CONCAT:** Gabungkan kolom (seperti `Borough` dan `Zone`) untuk membuat label yang lebih informatif di Dashboard.
+- **Aturan `LIMIT`:** Selalu pakai `LIMIT 100` saat mencoba query di tabel raksasa agar database tidak _hang_.
+- **Case Sensitivity:** Di PostgreSQL, hati-hati dengan tanda kutip dua (`"PULocationID"`) jika nama kolom menggunakan huruf besar.
+
+---
+
+### 📌 Summary
+
+SQL bagi _Data Engineer_ adalah alat untuk memastikan **Data Integrity**. Kita harus tahu kapan harus menggabungkan data, bagaimana cara memvalidasi data yang hilang, dan cara mengubah format data agar efisien bagi para _User_ (Analyst/Data Scientist).
+
+> **Insight Pribadi:** Ternyata SQL DE itu bukan cuma soal `SELECT *`, tapi soal bagaimana kita menjamin bahwa setiap baris data yang masuk ke database itu valid, konsisten, dan bermakna.
+
+---
+
+Materi pembersihan ini adalah bagian dari _Good Engineering Practice_. Sebagai calon _Data Engineer_, kamu akan sering berurusan dengan dataset berukuran Gigabyte atau Terabyte. Jika tidak rajin melakukan _Cleanup_, penyimpanan laptop atau server bisa cepat penuh.
+
+Berikut adalah catatan belajar saya mengenai **Housekeeping & Resource Management**:
+
+---
+
+# 🧹11-Docker Housekeeping & Cleanup
+
+> **Topik:** _Maintaining a Healthy Development Environment_
+
+### Filosofi: Stateless vs Stateful
+
+Pelajaran paling berharga di materi penutup ini adalah membedakan mana yang boleh "dibuang" dan mana yang harus "dijaga":
+
+- **Stateless (Compute):** Script Python dan Docker Image. Ini aman dihapus kapan saja karena kita punya "resepnya" (Dockerfile). Jika butuh lagi, tinggal _build_ ulang.
+- **Stateful (Storage):** Database dan Volume. Ini harus dijaga dengan hati-hati karena berisi data hasil olahan kita.
+
+---
+
+### Docker "Nuclear" Commands (The Prune Way)
+
+Di dunia profesional, kita menggunakan perintah `prune` untuk membersihkan "sampah" digital yang sudah tidak punya koneksi ke kontainer aktif.
+
+| Objek         | Perintah Utama           | Catatan Saya                                                              |
+| ------------- | ------------------------ | ------------------------------------------------------------------------- |
+| **Container** | `docker container prune` | Hapus semua kontainer yang sudah mati (_Exited_).                         |
+| **Image**     | `docker image prune -a`  | Hapus semua _image_ lama yang sudah tidak dipakai. Hemat SSD!             |
+| **Volume**    | `docker volume prune`    | **Bahaya!** Jangan pakai ini kalau belum yakin datanya sudah di-_backup_. |
+| **Sistem**    | `docker system prune`    | Sapu bersih semuanya (Container, Network, dan Cache).                     |
+
+---
+
+### Pembersihan File Lokal
+
+Setelah proses _Ingestion_ ke PostgreSQL sukses, file mentah biasanya hanya jadi beban di folder _project_.
+
+- **Hapus Dataset:** `rm *.csv.gz` atau `rm *.parquet`. Datanya sudah aman di "perut" Postgres.
+- **Hapus Cache:** `rm -rf __pycache__`. Biar folder _project_ rapi dan ringan sebelum kita _push_ ke Git.
+
+> **📝 Note** Selalu masukkan `__pycache__` dan file data besar ke dalam `.gitignore` agar tidak sengaja terunggah ke repositori.
+
+---
+
+### Reset Environment
+
+Kadang-kadang, cara terbaik untuk belajar adalah dengan mengulang. Untuk menghapus semua infrastruktur sekaligus datanya, gunakan:
+
+```bash
+docker-compose down -v
+
+```
+
+_Flag_ `-v` adalah kuncinya. Tanpa `-v`, data di database akan tetap tersimpan meskipun kontainernya mati.
+
+---
+
+### 📌 Summary
+
+Menjadi _Data Engineer_ bukan cuma soal membangun pipa data, tapi juga merawat "pabrik" tempat pipa itu berada. Dengan rajin melakukan _housekeeping_, kita memastikan server kita tetap responsif dan tidak kehabisan ruang di saat-saat kritis (seperti saat _ingesting_ data raksasa).
 
 ---
