@@ -318,3 +318,76 @@ Saya harus sangat teliti di bagian ini:
 Proses _Data Ingestion_ bukan sekadar `copy-paste`. Kita harus memperhatikan **Data Integrity** (tipe data yang benar) dan **Resource Management** (penggunaan RAM). Dengan teknik _Chunking_ dan penanganan _error_ `StopIteration`, kita bisa memproses data sebesar apa pun tanpa takut laptop meledak.
 
 ---
+
+Materi ini adalah jembatan besar antara menjadi seorang **Analyst** dan seorang **Data Engineer**. Saya belajar bahwa kodingan yang "jalan" di Jupyter Notebook belum tentu siap untuk sistem produksi. Kita harus mengubahnya menjadi script yang bisa diotomatisasi oleh robot.
+
+Berikut adalah catatan belajar saya untuk materi **Refactoring to Python Scripts**:
+
+---
+
+# 🐍 06-Refactoring to Production Scripts
+
+**Topik:** _From Notebooks to Automated CLI Tools_
+
+### Mindset: Analyst vs. Engineer
+
+- **Analyst (Jupyter):** Fokus pada eksplorasi, visual, dan interaktif. Tapi, sulit dijadwalkan secara otomatis.
+- **Engineer (Script `.py`):** Fokus pada otomatisasi, skalabilitas, dan parameter dinamis. Inilah yang digunakan di sistem nyata (seperti Airflow).
+
+---
+
+### Tooling Baru: Library `click`
+
+Dulu di modul awal saya belajar `sys.argv`, tapi sekarang saya diperkenalkan dengan **`click`**.
+
+- **Kenapa `click`?** Jauh lebih rapi dan profesional untuk membuat **CLI (Command Line Interface)**.
+- **Decorator Magic (`@click`):** Saya belajar bahwa tanda `@` di atas fungsi itu gunanya untuk "membungkus" fungsi tersebut agar punya kekuatan tambahan (menangkap input dari terminal).
+
+> **📝Note:** Menggunakan `click` membuat script saya tidak lagi kaku. Saya bisa memasukkan user, password, dan URL database langsung dari terminal tanpa perlu menyentuh kode programnya lagi.
+
+---
+
+### Prinsip "Hardcoding is Evil"
+
+Satu pelajaran penting yang saya catat: **Jangan pernah menulis nilai tetap (Hardcoded)** seperti password atau URL file di dalam kode.
+
+- **Solusinya:** Gunakan **Arguments/Flags**.
+- **Manfaatnya (Reusability):** Bulan depan kalau ada data baru, saya tidak perlu buka file `.py`-nya. Cukup ganti link URL-nya di terminal. Script yang sama bisa dipakai berkali-kali!
+
+---
+
+### Struktur Script `ingest_data.py`
+
+Saya merangkum struktur script produksi yang baik:
+
+1. **Definisi Argumen:** Menentukan apa saja yang harus diinput (user, password, host, port, db, table, url).
+2. **Koneksi Engine:** Membuat jalur ke database berdasarkan argumen tersebut.
+3. **Logika Ingestion:** Menggabungkan teknik _Chunking_ dan _DateTime conversion_ agar data masuk dengan format yang benar.
+
+---
+
+### Cara Eksekusi Ala Engineer
+
+Menjalankan script sekarang terasa lebih keren karena menggunakan terminal:
+
+```bash
+uv run python ingest_data.py \
+  --user=root \
+  --password=root \
+  --host=localhost \
+  --port=5432 \
+  --db=ny_taxi \
+  --table_name=yellow_taxi_trips \
+  --url="https://link-data-taksi.csv.gz"
+
+```
+
+---
+
+### 📌 Summary
+
+Mengubah Notebook menjadi Script adalah proses **Standardisasi**. Dengan library `click`, script saya sekarang bersifat dinamis dan siap dijalankan oleh sistem otomatis mana pun.
+
+**📝Note:** Saya melihat sudut pandang baru ini seperti memisahkan antara "mesin" (logika kode) dan "bahan bakar" (parameter input). Mesinnya tetap sama, bahan bakarnya bisa kita ganti-ganti sesuai kebutuhan.
+
+---
