@@ -629,12 +629,6 @@ SQL bagi _Data Engineer_ adalah alat untuk memastikan **Data Integrity**. Kita h
 
 ---
 
-Materi pembersihan ini adalah bagian dari _Good Engineering Practice_. Sebagai calon _Data Engineer_, kamu akan sering berurusan dengan dataset berukuran Gigabyte atau Terabyte. Jika tidak rajin melakukan _Cleanup_, penyimpanan laptop atau server bisa cepat penuh.
-
-Berikut adalah catatan belajar saya mengenai **Housekeeping & Resource Management**:
-
----
-
 # 🧹11-Docker Housekeeping & Cleanup
 
 > **Topik:** _Maintaining a Healthy Development Environment_
