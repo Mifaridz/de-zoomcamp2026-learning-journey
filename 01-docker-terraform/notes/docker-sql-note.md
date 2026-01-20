@@ -319,7 +319,7 @@ Proses _Data Ingestion_ bukan sekadar `copy-paste`. Kita harus memperhatikan **D
 
 # 🐍 06-Refactoring to Production Scripts
 
-**Topik:** _From Notebooks to Automated CLI Tools_
+> **Topik:** _From Notebooks to Automated CLI Tools_
 
 ### Mindset: Analyst vs. Engineer
 
@@ -386,7 +386,7 @@ Mengubah Notebook menjadi Script adalah proses **Standardisasi**. Dengan library
 
 # 🖥️ 07-Docker Networking & pgAdmin GUI
 
-**Topik:** _Inter-container Communication & Database Management_
+> **Topik:** _Inter-container Communication & Database Management_
 
 ### Konsep Utama: Kenapa Butuh Docker Network?
 
@@ -460,7 +460,7 @@ Inti dari materi ini adalah memahami bahwa container tidak hidup sendirian. Agar
 
 # 🐳 08-Containerizing the Pipeline
 
-**Topik:** _Turning Scripts into Portable Data Products_
+> **Topik:** _Turning Scripts into Portable Data Products_
 
 ### Konsep Utama: Perubahan Koneksi
 
@@ -512,5 +512,62 @@ Saya merangkum jalur karir seorang DE dalam empat langkah dari materi ini:
 Proses _Containerizing_ ini memberikan jaminan **Reproducibility**. Tidak ada lagi drama "di laptop saya jalan, di server kok error?". Dengan Docker, lingkungan kerja kita sudah terkunci rapat dan aman.
 
 > **Insight Pribadi:** Ternyata, inti dari Data Engineering bukan cuma soal kodingan, tapi soal membangun "pipa" infrastruktur yang rapi, otomatis, dan tahan banting.
+
+---
+
+Gak nyangka, akhirnya sampai juga di penghujung **Modul 1: Introduction to Docker**. Kalau sebelumnya saya merasa seperti "tukang" yang harus narik kabel dan nyalain mesin satu-satu, di materi **Docker Compose** ini saya merasa naik level jadi seorang **Architect**.
+
+Berikut adalah catatan penutup saya untuk Modul 1, fokus pada efisiensi dan otomasi infrastruktur.
+
+---
+
+# 🎼 09- Docker Compose
+
+> **Topik:** _Infrastructure as Code (IaC) for Local Development_
+
+### Konsep Utama: Kenapa Harus Compose?
+
+Saya sangat menghargai prinsip **Infrastructure as Code (IaC)**. Daripada ngetik perintah `docker run` yang panjangnya kayak kereta api setiap kali mau mulai kerja, saya cukup menulis "resep master" di satu file.
+
+> **Analogi:** Saya bikin _blueprint_ (file YAML), lalu robot (Docker Compose) yang bakal beliin servernya, masang kabel LAN-nya, dan nyalain semuanya buat saya.
+
+---
+
+### Bedah File `docker-compose.yaml`
+
+Menulis YAML itu gampang-gampang susah. Satu aturan maut yang saya catat: **Spasi adalah segalanya!**
+
+- **Indentasi:** Jangan pernah pakai `Tab`, harus pakai `Double Space`. Kalau spasi salah, Docker bakal bingung dan error.
+- **Services:** Di sini tempat saya daftar aplikasi apa saja yang mau dijalankan (Postgres, pgAdmin, dll).
+- **Automatic Networking:** Ini fitur paling "magic". Semua kontainer yang ada di file yang sama otomatis bisa saling mengobrol pakai nama servisnya tanpa perlu saya buat network manual lagi.
+
+> **📝 Note:** Di dalam Compose, `pgdatabase` bukan cuma nama, tapi juga alamat (Hostname). Ini yang bikin hidup Data Engineer jauh lebih mudah.
+
+---
+
+### Cheat Sheet: Lifecycle Management
+
+Ini adalah perintah harian yang wajib saya hafal di luar kepala:
+
+| Perintah                 | Apa yang Terjadi?                                                                     |
+| ------------------------ | ------------------------------------------------------------------------------------- |
+| `docker-compose up`      | Nyalain semua sistem (saya bisa lihat log-nya langsung).                              |
+| `docker-compose up -d`   | **Detached mode**. Nyalain semua di background, terminal tetap bisa dipakai.          |
+| `docker-compose down`    | Matiin dan hapus kontainer. Bersih total!                                             |
+| `docker-compose down -v` | Matiin sistem **DAN** hapus data (Volume). Gunakan hanya kalau mau reset DB dari nol. |
+
+---
+
+### Menghubungkan Script Ingestion ke Compose
+
+Satu hal teknis yang saya pelajari: Docker Compose otomatis bikin nama network sendiri. Biasanya formatnya `[NAMA_FOLDER]_default`.
+
+- Jadi, kalau saya mau jalankan script `ingest_data.py` dari luar Compose tapi mau nyambung ke Postgres yang di dalam Compose, saya harus pakai nama network tersebut.
+
+> **📝 Note:** Selalu cek nama network pakai `docker network ls` sebelum menjalankan kontainer ingestion agar tidak terjadi "Connection Error".
+
+### 📌 Summary
+
+Modul 1 ini mengajarkan saya bahwa Data Engineering bukan cuma soal _coding_, tapi soal membangun **Infrastruktur yang Reproducible**. Dengan Docker Compose, saya punya "pabrik" data yang bisa saya bawa kemana saja, jalankan di OS apa saja, dan hasilnya akan selalu sama.
 
 ---
