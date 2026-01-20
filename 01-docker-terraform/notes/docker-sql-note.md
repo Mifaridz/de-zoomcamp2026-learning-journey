@@ -83,7 +83,7 @@ Docker bukan cuma soal instalasi software, tapi soal cara kita membungkus seluru
 Masalah klasik pada saat menjalakan python dengan project yang berbeda adalah seringnya _library_ yang tabrakan. Jadi saat akan membuat sebuah project alahkah baiknya melakukan setting Environment terlebih dahulu dan list _library_ apa saja yang akan digunakan.
 
 - **Wajib Pakai Virtual Env:** Jangan pernah install apapun di Python global. Titik.
-- **Tool Pilihan: `uv**`: Ini *game changer*. Jauh lebih ngebut dibanding `pip`atau`conda`karena dibuat pake Rust. Gunakan `_curl -LsSf https://astral.sh/uv/install.sh | sh_`untuk install`uv`jika menggubakan`WSL` karena terhalang lincense.
+- **Tool Pilihan: `uv`**: Ini _game changer_. Jauh lebih ngebut dibanding `pip`atau`conda`karena dibuat pake Rust. Gunakan `_curl -LsSf https://astral.sh/uv/install.sh | sh_`untuk install`uv`jika menggubakan`WSL` karena terhalang lincense.
 - **Highlight Perintah Penting:**
 - `uv init --python=3.13`: Bikin pondasi project baru.
 - `uv add pandas pyarrow`: Masukin "bumbu" (library) yang kita butuhin.
@@ -181,7 +181,7 @@ Setelah Dockerfile siap, ini langkah yang saya lakukan di terminal:
 
 Memasukkan pipeline ke dalam Docker merupakan **standarisasi** untuk setiap tugas "_Image_" atau project yang akan dijalankan. Dengan teknik _Layer Caching_, proses _development_ jadi jauh lebih cepat.
 
-**📝Note:** Penggunaan `ENTRYPOINT` membuat container berperilaku seperti aplikasi _executable_. Kita tinggal panggil nama image-nya dan masukkan argumen yang kita mau di belakangnya.
+> **📝Note:** Penggunaan `ENTRYPOINT` membuat container berperilaku seperti aplikasi _executable_. Kita tinggal panggil nama image-nya dan masukkan argumen yang kita mau di belakangnya.
 
 ---
 
@@ -251,8 +251,6 @@ Ada satu _insight_ penting yang saya catat:
 
 Inti dari materi ini adalah **Pemisahan antara Compute dan Storage**. Container boleh mati atau diganti kapan saja (`--rm`), asalkan datanya sudah kita ikat ke folder lokal lewat **Bind Mount**. Dengan menggunakan `uv --dev`, manajemen _tools_ pembantu (seperti `pgcli`) juga jadi jauh lebih bersih di mata seorang _developer_.
 
-**Insight Pribadi:** Ternyata mengelola database bisa semudah menjalankan satu perintah Docker. Tidak perlu install macem-macem secara permanen di Windows/Mac.
-
 ---
 
 # 🚜05-Data Ingestion (The Chunking Method)
@@ -319,12 +317,6 @@ Proses _Data Ingestion_ bukan sekadar `copy-paste`. Kita harus memperhatikan **D
 
 ---
 
-Materi ini adalah jembatan besar antara menjadi seorang **Analyst** dan seorang **Data Engineer**. Saya belajar bahwa kodingan yang "jalan" di Jupyter Notebook belum tentu siap untuk sistem produksi. Kita harus mengubahnya menjadi script yang bisa diotomatisasi oleh robot.
-
-Berikut adalah catatan belajar saya untuk materi **Refactoring to Python Scripts**:
-
----
-
 # 🐍 06-Refactoring to Production Scripts
 
 **Topik:** _From Notebooks to Automated CLI Tools_
@@ -366,7 +358,7 @@ Saya merangkum struktur script produksi yang baik:
 
 ---
 
-### Cara Eksekusi Ala Engineer
+### Cara Eksekusi Script
 
 Menjalankan script sekarang terasa lebih keren karena menggunakan terminal:
 
@@ -388,6 +380,137 @@ uv run python ingest_data.py \
 
 Mengubah Notebook menjadi Script adalah proses **Standardisasi**. Dengan library `click`, script saya sekarang bersifat dinamis dan siap dijalankan oleh sistem otomatis mana pun.
 
-**📝Note:** Saya melihat sudut pandang baru ini seperti memisahkan antara "mesin" (logika kode) dan "bahan bakar" (parameter input). Mesinnya tetap sama, bahan bakarnya bisa kita ganti-ganti sesuai kebutuhan.
+> **📝Note:** Saya melihat sudut pandang baru ini seperti memisahkan antara "mesin" (logika kode) dan "bahan bakar" (parameter input). Mesinnya tetap sama, bahan bakarnya bisa kita ganti-ganti sesuai kebutuhan.
+
+---
+
+# 🖥️ 07-Docker Networking & pgAdmin GUI
+
+**Topik:** _Inter-container Communication & Database Management_
+
+### Konsep Utama: Kenapa Butuh Docker Network?
+
+Saya memahami ini sebagai konsep dasar _Distributed Systems_.
+
+- **Isolated Environment:** Secara default, setiap container itu seperti laptop yang terpisah.
+- **Masalah Localhost:** Bagi Container A, `localhost` adalah dirinya sendiri. Dia tidak bisa melihat Container B melalui `localhost`.
+- **Docker Network:** Berfungsi sebagai "Switch LAN" virtual yang menghubungkan antar container agar bisa saling berkomunikasi.
+- **Service Discovery (DNS):** Docker punya fitur cerdas di mana **Nama Container** otomatis menjadi **Hostname**. Kita tidak perlu menghafal IP Address container, cukup panggil namanya saja.
+
+---
+
+### Mengapa Baru Sekarang Kita Mengatur Network?
+
+Saya mencatat perbedaan mendasar antara latihan sebelumnya dan sekarang:
+
+1. **Kemarin:** Script Python jalan di laptop (Host) -> Mengakses Docker via `localhost` (Jembatan Port). Ini berhasil.
+2. **Sekarang:** pgAdmin jalan di dalam Docker -> Ingin mengakses Postgres yang juga di Docker. pgAdmin tidak bisa pakai `localhost` karena database-nya berada di "laptop" (container) yang berbeda.
+
+---
+
+### Workflow: Menghubungkan Dua Container
+
+Langkah-langkah yang saya jalankan untuk membuat ekosistem database yang terhubung:
+
+1. **Buat Jaringan Virtual:**
+   `docker network create pg-network`
+2. **Jalankan Postgres dengan Nama Spesifik:**
+
+```bash
+docker run -d \
+  --network=pg-network \
+  --name pgdatabase \
+  -e POSTGRES_USER="root" ... (parameter lainnya)
+
+```
+
+> **Highlight:** Parameter `--name pgdatabase` sangat penting karena ini akan menjadi alamat (Hostname) yang dipanggil oleh pgAdmin.
+
+3. **Jalankan pgAdmin di Jaringan yang Sama:**
+
+```bash
+docker run -d \
+  --network=pg-network \
+  --name pgadmin \
+  -p 8085:80 \
+  dpage/pgadmin4
+
+```
+
+---
+
+### Konfigurasi Koneksi pgAdmin
+
+Saat mendaftarkan server baru di GUI pgAdmin, bagian paling krusial adalah **Hostname**.
+
+- **SALAH:** Mengisi `localhost`.
+- **BENAR:** Mengisi `pgdatabase` (sesuai nama container yang dibuat).
+
+> **📝Notel:** Port yang dipetakan ke laptop (`8085`) hanya digunakan untuk mengakses web-nya saja. Namun, di dalam jaringan Docker, komunikasi antar container tetap menggunakan port asli aplikasi (Postgres tetap `5432`).
+
+---
+
+### 📌 Summary
+
+Inti dari materi ini adalah memahami bahwa container tidak hidup sendirian. Agar bisa saling mengobrol, mereka harus berada di dalam **Docker Network** yang sama. Penggunaan **Nama Container sebagai Hostname** adalah standar industri yang memudahkan kita dalam mengelola infrastruktur tanpa harus pusing dengan perubahan IP dinamis.
+
+> **Insight Pribadi:** Ternyata membangun infrastruktur data itu seperti menyusun jaringan kabel LAN, tapi semuanya dilakukan lewat baris perintah (virtual). Dengan pgAdmin, saya sekarang bisa melihat data taksi yang kita _ingest_ kemarin dengan jauh lebih nyaman.
+
+---
+
+# 🐳 08-Containerizing the Pipeline
+
+**Topik:** _Turning Scripts into Portable Data Products_
+
+### Konsep Utama: Perubahan Koneksi
+
+Saya mencatat satu perubahan logika yang sangat krusial saat memindahkan script ke dalam Docker:
+
+- **Kemarin (Local):** Script di laptop mengakses database via `localhost`.
+- **Sekarang (Inside Docker):** Karena script berjalan di dalam container `taxi_ingest`, dia tidak lagi mengenal `localhost` milik laptop.
+- **Solusinya:** Menggunakan **Nama Container** (`pgdatabase`) sebagai Hostname. Docker Network otomatis menerjemahkan nama ini menjadi alamat IP yang tepat.
+
+---
+
+### Optimasi Dockerfile: Layer Caching
+
+Saya belajar teknik "cerdas" dalam menyusun Dockerfile agar proses _build_ tidak memakan waktu lama:
+
+1. **Tahap 1:** Copy `pyproject.toml` dan jalankan `uv sync`.
+2. **Tahap 2:** Copy script utama `ingest_data.py`.
+
+- **Kenapa dipisah?** Karena proses instalasi library itu berat dan lama. Dengan memisahkan perintahnya, jika saya hanya mengubah logika kodingan, Docker akan memakai _cache_ untuk library-nya. Build ulang jadi super cepat!
+
+---
+
+### Workflow Eksekusi Final
+
+Inilah langkah-langkah standar industri yang saya jalankan:
+
+| Langkah   | Perintah                                               | Tujuan                                                                  |
+| --------- | ------------------------------------------------------ | ----------------------------------------------------------------------- |
+| **Build** | `docker build -t taxi_ingest:v001 .`                   | Membuat "Master Image" aplikasi.                                        |
+| **Run**   | `docker run --network=pg-network taxi_ingest:v001 ...` | Menjalankan proses ingestion di dalam ekosistem Docker yang terisolasi. |
+
+> **📝 Note:** Jangan lupa sertakan flag `--network=pg-network`. Tanpa ini, script kita akan "buta" dan tidak bisa menemukan database meskipun namanya sudah benar.
+
+---
+
+### Standar Industri: Alur Kerja Data Engineer
+
+Saya merangkum jalur karir seorang DE dalam empat langkah dari materi ini:
+
+1. **Explore:** Eksperimen data di Jupyter Notebook (`.ipynb`).
+2. **Refactor:** Ubah jadi script Python bersih (`.py`) dengan parameter dinamis.
+3. **Containerize:** Bungkus semuanya ke dalam Dockerfile.
+4. **Deploy:** Jalankan di server/cloud menggunakan Docker.
+
+---
+
+### 📌 Summary
+
+Proses _Containerizing_ ini memberikan jaminan **Reproducibility**. Tidak ada lagi drama "di laptop saya jalan, di server kok error?". Dengan Docker, lingkungan kerja kita sudah terkunci rapat dan aman.
+
+> **Insight Pribadi:** Ternyata, inti dari Data Engineering bukan cuma soal kodingan, tapi soal membangun "pipa" infrastruktur yang rapi, otomatis, dan tahan banting.
 
 ---
