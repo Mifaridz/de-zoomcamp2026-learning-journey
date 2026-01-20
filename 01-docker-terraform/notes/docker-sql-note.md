@@ -567,7 +567,7 @@ Satu hal teknis yang saya pelajari: Docker Compose otomatis bikin nama network s
 
 ### 📌 Summary
 
-Modul 1 ini mengajarkan saya bahwa Data Engineering bukan cuma soal _coding_, tapi soal membangun **Infrastruktur yang Reproducible**. Dengan Docker Compose, saya punya "pabrik" data yang bisa saya bawa kemana saja, jalankan di OS apa saja, dan hasilnya akan selalu sama.
+Data Engineering bukan cuma soal _coding_, tapi soal membangun **Infrastruktur yang Reproducible**. Dengan Docker Compose, saya punya "pabrik" data yang bisa saya bawa kemana saja, jalankan di OS apa saja, dan hasilnya akan selalu sama.
 
 ---
 
