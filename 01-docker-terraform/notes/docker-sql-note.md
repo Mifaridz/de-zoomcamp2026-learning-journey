@@ -66,11 +66,11 @@ docker run -it \
 
 ```
 
-### 📌 Summary (Rangkuman Akhir)
+### 📌 Summary
 
 Docker bukan cuma soal instalasi software, tapi soal cara kita membungkus seluruh environment kerja supaya rapi. Poin pentingnya adalah penggunaan _Image_ untuk menghemat space dan selalu pakai flag _--rm_ pas lagi testing supaya sampah container nggak numpuk di laptop.
 
-> **💡 Note:** _Docker memisahkan antara compute (container) dan storage (volume). Ini adalah prinsip dasar infrastruktur data yang modern._
+> **Note:** _Docker memisahkan antara compute (container) dan storage (volume). Ini adalah prinsip dasar infrastruktur data yang modern._
 
 ---
 
@@ -89,7 +89,7 @@ Masalah klasik pada saat menjalakan python dengan project yang berbeda adalah se
 - `uv add pandas pyarrow`: Masukin "bumbu" (library) yang kita butuhin.
 - `uv run python script.py`: Cara "aman" jalanin script biar nggak nyari library ke mana-mana.
 
-> **💡 Note:** `uv run` itu praktis banget karena dia otomatis nge-sync environment kita sebelum script jalan. Gak ada lagi drama "ModuleNotFoundError".
+> **📝Note:** `uv run` itu praktis banget karena dia otomatis nge-sync environment kita sebelum script jalan. Gak ada lagi drama "ModuleNotFoundError".
 
 ---
 
@@ -102,7 +102,7 @@ Saya belajar kalau pipeline itu nggak harus ribet. Esensinya cuma tiga: **Input 
 - **Output:** Simpan ke database (Postgres) atau file yang lebih canggih (Parquet).
 - **Dynamic Scripting:** Pake `sys.argv` supaya script kita nggak kaku. Jadi bisa input argumen (misal: tanggal data) lewat terminal tanpa harus edit file `.py`-nya terus-terusan.
 
-> **💡 Note:** Jangan lupa pake `df.head()` buat _sanity check_ di tengah jalan, biar kita tau datanya beneran ada atau nggak sebelum diproses lebih jauh.
+> **📝Note:** Jangan lupa pake `df.head()` buat _sanity check_ di tengah jalan, biar kita tau datanya beneran ada atau nggak sebelum diproses lebih jauh.
 
 ---
 
@@ -112,11 +112,11 @@ Dulu taunya cuma CSV, sekarang baru ngeh kenapa orang DE suka **Parquet**.
 
 - **Highlight:** Parquet itu format _columnar_. Efeknya? Ukuran file jadi jauh lebih kecil (dikompresi) dan baca datanya jauh lebih kenceng daripada CSV yang baris demi baris.
 
-> **💡 Note:** _Don't be a messy dev!_ Langsung tambahin `*.parquet` di `.gitignore` biar repository Git kita tetep bersih dari file data yang berat.
+> **📝Note:** _Don't be a messy dev!_ Langsung tambahin `*.parquet` di `.gitignore` biar repository Git kita tetep bersih dari file data yang berat.
 
 ---
 
-### 📌 Summary (Rangkuman Akhir)
+### 📌 Summary
 
 Hari ini saya berhasil bikin pipeline Python sederhana yang bisa nerima argumen terminal. Inti dari materi ini bukan cuma soal nulis kode, tapi soal **standardisasi**. Pake `uv` buat ngatur dependensi, pake `sys.argv` buat bikin script fleksibel, dan milih format `Parquet` buat efisiensi.
 
@@ -170,7 +170,7 @@ Ini poin paling teknis yang saya pelajari. Di Dockerfile, saya melakukan **COPY 
 
 Setelah Dockerfile siap, ini langkah yang saya lakukan di terminal:
 
-| Langkah   | Perintah                                          | Catatan Saya                                                         |
+| Langkah   | Perintah                                          | Note                                                                 |
 | --------- | ------------------------------------------------- | -------------------------------------------------------------------- |
 | **Build** | `docker build -t pipeline-data:v1 .`              | Jangan lupa **titik (.)** di akhir! Itu artinya folder saat ini.     |
 | **Run**   | `docker run -it --rm pipeline-data:v1 2026-01-18` | `2026-01-18` akan ditangkap sebagai argumen oleh script Python saya. |
@@ -181,7 +181,7 @@ Setelah Dockerfile siap, ini langkah yang saya lakukan di terminal:
 
 Memasukkan pipeline ke dalam Docker merupakan **standarisasi** untuk setiap tugas "_Image_" atau project yang akan dijalankan. Dengan teknik _Layer Caching_, proses _development_ jadi jauh lebih cepat.
 
-**Insight Penting:** Penggunaan `ENTRYPOINT` membuat container berperilaku seperti aplikasi _executable_. Kita tinggal panggil nama image-nya dan masukkan argumen yang kita mau di belakangnya.
+**📝Note:** Penggunaan `ENTRYPOINT` membuat container berperilaku seperti aplikasi _executable_. Kita tinggal panggil nama image-nya dan masukkan argumen yang kita mau di belakangnya.
 
 ---
 
@@ -227,7 +227,7 @@ docker run -it --rm \
 
 ---
 
-### Jebakan Batman: Localhost vs Docker Network
+### Jebakan "Batman": Localhost vs Docker Network
 
 Ada satu _insight_ penting yang saya catat:
 
@@ -247,10 +247,74 @@ Ada satu _insight_ penting yang saya catat:
 
 ---
 
-### 📌 Summary (Rangkuman Akhir)
+### 📌 Summary
 
 Inti dari materi ini adalah **Pemisahan antara Compute dan Storage**. Container boleh mati atau diganti kapan saja (`--rm`), asalkan datanya sudah kita ikat ke folder lokal lewat **Bind Mount**. Dengan menggunakan `uv --dev`, manajemen _tools_ pembantu (seperti `pgcli`) juga jadi jauh lebih bersih di mata seorang _developer_.
 
 **Insight Pribadi:** Ternyata mengelola database bisa semudah menjalankan satu perintah Docker. Tidak perlu install macem-macem secara permanen di Windows/Mac.
+
+---
+
+# 🚜05-Data Ingestion (The Chunking Method)
+
+> **Topik:** _Handling Large Datasets & Memory Optimization_
+
+### Konsep Utama: "Kenapa Harus Chunking?"
+
+Masalah utama di Data Engineering adalah **Memory Error**. Jika kita punya file 10GB sementara RAM laptop cuma 8GB, membukanya secara langsung akan membuat sistem _crash_.
+
+- **Solusinya:** Membaca data dalam potongan kecil (misal per 100.000 baris).
+- **Iterator:** Objek Python yang bertindak sebagai "penunjuk". Dia tidak memuat semua data, tapi hanya mengambil satu potong data saat kita memanggilnya.
+
+---
+
+### Tooling & Setup
+
+Untuk proses penyerapan (_ingestion_) ini, memerlukan beberapa alat tambahan di _environment_ `uv`:
+
+- **SQLAlchemy:** Translator yang mengubah perintah Python menjadi bahasa SQL.
+- **psycopg2-binary:** Driver atau jembatan komunikasi antara Python dan PostgreSQL.
+- **Jupyter:** Tempat eksperimen kode sebelum dijadikan script `.py` permanen.
+
+> **📝Note:** Gunakan perintah `uv add --dev jupyter` agar alat bantu eksperimen ini tidak memberatkan sistem saat nanti kita melakukan _deployment_ ke server produksi.
+
+---
+
+### Alur Kerja Ingestion
+
+#### 1. Koneksi Database (The Engine)
+
+Menggunakan `create_engine` sebagai pusat komunikasi ke Postgres Docker yang sudah kita nyalakan sebelumnya.
+
+- Format: `postgresql://user:pass@host:port/db_name`
+
+#### 2. Skema Otomatis (DDL)
+
+Salah satu kemudahan di Pandas adalah fungsi `pd.io.sql.get_schema`. Dia otomatis menebak tipe data kolom (Integer, Float, atau Timestamp) dari file CSV untuk dibuatkan tabelnya di SQL.
+
+> **📝Note:** Selalu cek tipe data kolom tanggal. Jika tipenya masih _Object_, paksa jadi _Datetime_ dengan parameter `parse_dates` agar kita bisa melakukan analisis waktu di database nanti.
+
+#### 3. Logika Ingestion Berulang
+
+Ini adalah inti dari kodenya. Prosesnya adalah:
+
+1. **Buat Tabel Kosong:** Pakai `head(0).to_sql(..., if_exists='replace')`.
+2. **Looping Data:** Menggunakan `while True` dan `next(df_iter)`.
+3. **Append Data:** Masukkan potongan data baru ke bawah data yang sudah ada dengan `if_exists='append'`.
+
+---
+
+### Strategi `if_exists`: Replace vs Append
+
+Saya harus sangat teliti di bagian ini:
+
+- **`replace`**: Digunakan hanya sekali di awal untuk menghapus tabel lama dan membuat struktur baru yang bersih.
+- **`append`**: Digunakan di dalam _looping_ untuk terus menumpuk data. Jika salah pakai `replace` di dalam _loop_, data sebelumnya akan terhapus dan yang tersisa cuma potongan terakhir!
+
+---
+
+### 📌 Summary
+
+Proses _Data Ingestion_ bukan sekadar `copy-paste`. Kita harus memperhatikan **Data Integrity** (tipe data yang benar) dan **Resource Management** (penggunaan RAM). Dengan teknik _Chunking_ dan penanganan _error_ `StopIteration`, kita bisa memproses data sebesar apa pun tanpa takut laptop meledak.
 
 ---
