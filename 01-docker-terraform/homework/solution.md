@@ -40,7 +40,8 @@ pip --version
 
 **Objective:** Identify the correct hostname and port for service communication.
 ![alt text](https://github.com/Mifaridz/de-zoomcamp2026-learning-journey/blob/main/01-docker-terraform/homework/homework-image/question-2.png?raw=true)
-**Answer:** `db:5432`
+
+>**Answer:** `db:5432`
 
 **Reasoning:**
 In a user-defined Docker network (created by `docker-compose`), services communicate using their **service names** as hostnames.
@@ -70,8 +71,9 @@ I used a Python script (available in `ingest_data.py`) to download the *Green Ta
 ### Question 3. Counting short trips
 
 **Objective:** Count trips  1 mile between 2025-11-01 and 2025-12-01.
+![alt text](https://github.com/Mifaridz/de-zoomcamp2026-learning-journey/blob/main/01-docker-terraform/homework/homework-image/question-3.png?raw=true)
 
-**Answer:** `8,421`
+>**Answer:** `8007`
 
 **SQL Query:**
 
