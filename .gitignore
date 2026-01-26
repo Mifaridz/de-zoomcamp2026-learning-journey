@@ -1,0 +1,18 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.csv
+*.parquet
+*.csv.gz
+
+# Terraform local files
+.terraform/
+*.tfstate
+*.tfstate.backup
+
+# Environment variables files
+.env
+
+# IDE settings folders 
+.vscode/
+.idea/
