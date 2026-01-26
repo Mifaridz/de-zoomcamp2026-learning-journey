@@ -142,8 +142,9 @@ LIMIT 1;
 ### Question 6. Largest tip
 
 **Objective:** Find the drop-off zone with the largest tip for passengers picked up in "East Harlem North".
+![alt text](https://github.com/Mifaridz/de-zoomcamp2026-learning-journey/blob/main/01-docker-terraform/homework/homework-image/question-6.png?raw=true)
 
-**Answer:** `JFK Airport`
+>**Answer:** `Yorkville West`
 
 **SQL Query:**
 
@@ -170,7 +171,7 @@ LIMIT 1;
 
 **Objective:** Identify the correct sequence of Terraform commands.
 
-**Answer:** `terraform init, terraform apply -auto-approve, terraform destroy`
+>**Answer:** `terraform init, terraform apply -auto-approve, terraform destroy`
 
 **Explanation:**
 
