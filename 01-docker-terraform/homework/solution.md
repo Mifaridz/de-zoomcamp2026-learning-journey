@@ -117,8 +117,9 @@ LIMIT 1;
 ### Question 5. Biggest pickup zone
 
 **Objective:** Find the pickup zone with the largest total amount on 2025-11-18.
+![alt text](https://github.com/Mifaridz/de-zoomcamp2026-learning-journey/blob/main/01-docker-terraform/homework/homework-image/question-5.png?raw=true)
 
-**Answer:** `East Harlem North`
+>**Answer:** `East Harlem North`
 
 **SQL Query:**
 
