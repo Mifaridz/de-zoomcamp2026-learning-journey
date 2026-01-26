@@ -91,8 +91,10 @@ WHERE lpep_pickup_datetime >= '2025-11-01'
 ### Question 4. Longest trip for each day
 
 **Objective:** Find the day with the longest trip distance (filtering out outliers > 100 miles).
+![alt text](https://github.com/Mifaridz/de-zoomcamp2026-learning-journey/blob/main/01-docker-terraform/homework/homework-image/question-4.png?raw=true)
 
-**Answer:** `2025-11-23`
+
+>**Answer:** `2025-11-14`
 
 **SQL Query:**
 
