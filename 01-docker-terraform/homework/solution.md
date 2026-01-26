@@ -18,6 +18,7 @@ This repository contains my solutions for **Module 1** of the Data Engineering Z
 
 **Objective:** Check the `pip` version inside the python image.
 ![alt text](https://github.com/Mifaridz/de-zoomcamp2026-learning-journey/blob/main/01-docker-terraform/homework/homework-image/question-1.png?raw=true)
+
 >**Answer:** `25.3`
 
 **Steps:**
@@ -38,7 +39,7 @@ pip --version
 ### Question 2. Understanding Docker networking and docker-compose
 
 **Objective:** Identify the correct hostname and port for service communication.
-
+![alt text](https://github.com/Mifaridz/de-zoomcamp2026-learning-journey/blob/main/01-docker-terraform/homework/homework-image/question-2.png?raw=true)
 **Answer:** `db:5432`
 
 **Reasoning:**

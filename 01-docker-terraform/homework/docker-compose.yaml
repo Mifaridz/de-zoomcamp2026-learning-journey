@@ -1,5 +1,5 @@
 services:
-  db:
+  db:                                             #<-- Service Name
     container_name: postgres
     image: postgres:17-alpine
     environment:
@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: 'postgres'
       POSTGRES_DB: 'ny_taxi'
     ports:
-      - '5433:5432'
+      - '5433:5432'                           #<-- HostPort:ContainerPort
     volumes:
       - vol-pgdata:/var/lib/postgresql/data
 
