@@ -684,3 +684,56 @@ _Flag_ `-v` adalah kuncinya. Tanpa `-v`, data di database akan tetap tersimpan m
 Menjadi _Data Engineer_ bukan cuma soal membangun pipa data, tapi juga merawat "pabrik" tempat pipa itu berada. Dengan rajin melakukan _housekeeping_, kita memastikan server kita tetap responsif dan tidak kehabisan ruang di saat-saat kritis (seperti saat _ingesting_ data raksasa).
 
 ---
+
+# 🏗️ 12-Infrastructure as Code (Terraform & GCP)
+
+> **Topik:** _Automating Cloud Infrastructure_
+
+### Blueprint vs. Manual Click
+
+Saya sangat paham sekarang kenapa **Infrastructure as Code (IaC)** itu penting:
+
+- **Manual (ClickOps):** Rawan salah klik, susah diulang, dan tidak ada rekam jejaknya.
+- **Terraform (IaC):** Kita menulis "resep" atau cetak biru. Terraform yang akan memastikan apa yang ada di Cloud sama persis dengan apa yang ada di kode (`main.tf`).
+- **State Management:** Fitur `terraform.tfstate` sangat keren karena Terraform punya "ingatan". Dia tahu apa yang sudah ada, jadi dia tidak perlu membangun ulang semuanya kalau kita cuma mau ganti satu hal kecil.
+
+---
+
+### Ritual 4 Langkah Terraform
+
+Sebagai pemula, saya wajib menghafal urutan perintah ini:
+
+1. **`terraform init`**: Persiapan peralatan (download provider GCP).
+2. **`terraform plan`**: Simulasi. "Apa yang akan berubah?". Ini langkah paling aman untuk mencegah tagihan membengkak secara tidak sengaja.
+3. **`terraform apply`**: Eksekusi nyata. Membuat _Storage Bucket_ dan _BigQuery Dataset_.
+4. **`terraform destroy`**: Penghancuran. Sangat berguna untuk memastikan tidak ada biaya yang berjalan saat saya sedang tidak belajar.
+
+---
+
+### Data Lake vs. Data Warehouse
+
+Di GCP, saya akan membangun dua fondasi utama:
+
+- **Google Cloud Storage (GCS) → Data Lake:** Tempat parkir file mentah (CSV/Parquet). Ibaratnya ini adalah gudang penyimpanan barang sebelum diolah.
+- **BigQuery → Data Warehouse:** Database raksasa untuk analisis. Di sinilah data "matang" akan disimpan dan di-query oleh tim analis.
+
+---
+
+### Menjaga "Kunci Rumah"
+
+Peringatan tentang **Service Account** dan **.gitignore** ini saya tandai dengan warna merah di catatan saya:
+
+- **Service Account** adalah identitas bot kita.
+- **JSON Key** adalah kunci aksesnya.
+- **Hukum Wajib:** Jangan pernah upload file `.json` kunci akses ke GitHub!
+- _Risiko:_ Tagihan kartu kredit bisa meledak karena akun dipakai orang lain untuk _mining crypto_.
+
+- **Action:** Segera buat file `.gitignore` yang mencakup `*.tfstate`, `.terraform/`, dan `*.json`.
+
+---
+
+### 📌 Summary
+
+Terraform adalah alat untuk **Otomasi**. Seorang _Data Engineer_ yang hebat tidak menghabiskan waktunya untuk klik-klik di browser, tapi menulis kode yang bisa membangun infrastruktur secara instan dan konsisten.
+
+---
