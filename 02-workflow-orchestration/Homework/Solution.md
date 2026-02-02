@@ -119,6 +119,7 @@ WHERE filename LIKE 'green_tripdata_2020-%';
 ### Question 5. How many rows are there for the Yellow Taxi data for the March 2021 CSV file?
 
 **Objective:** Count records for a specific month in 2021.
+![alt text](https://github.com/Mifaridz/de-zoomcamp2026-learning-journey/blob/main/02-workflow-orchestration/Homework/Homework-image/question-5.png?raw=true)
 
 > **Answer:** `1,925,152`
 
