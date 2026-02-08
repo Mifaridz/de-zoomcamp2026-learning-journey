@@ -1,4 +1,4 @@
-# 🎻 2.1-Introduction to Workflow Orchestration
+# 🎻 2-Introduction to Workflow Orchestration
 
 > **Topik:** Fondasi Orkestrasi Workflow & Pengenalan Kestra
 
