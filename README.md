@@ -89,8 +89,8 @@ Membangun proyek akhir yang mengintegrasikan semua materi dari Modul 1 sampai 6 
 | Week 1  | Intro & Prerequisites (Docker, Terraform, GCP) |   ✅   |    [Lihat](/01-docker-terraform/)    |
 | Week 2  | Workflow Orchestration                         |   ✅   | [Lihat](/02-workflow-orchestration/) |
 | Week 3  | Data Warehouse (BigQuery)                      |   ✅   |     [Lihat](/03-data-warehouse/)     |
-| Week 4  | Analytics Engineering (dbt)                    |   🚧   |                  -                   |
-| Week 5  | Batch Processing (Spark)                       |   📅   |                  -                   |
+| Week 4  | Analytics Engineering (dbt)                    |   ✅   | [Lihat](/04-analytics-engineering/)  |
+| Week 5  | Batch Processing (Spark)                       |   🚧   |                  -                   |
 | Week 6  | Stream Processing (Kafka)                      |   📅   |                  -                   |
 | Project | Capstone Project 1                             |   📅   |                  -                   |
 
