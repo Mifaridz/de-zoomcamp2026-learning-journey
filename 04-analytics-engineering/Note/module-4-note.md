@@ -274,7 +274,7 @@ Berguna jika tabel sumber saya sering berubah (kolomnya tertimpa data baru), tap
 
 Tempat menaruh query SQL untuk memastikan data saya benar. Aturannya sederhana: **Jika query menghasilkan baris (>0), maka test gagal.** \* _Contoh:_ Test untuk memastikan tidak ada total jam kerja yang lebih dari 24 jam dalam sehari.
 
-### **7. `analysis/` & `README.md**`
+### **7. `analysis/` & `README.md`**
 
 - **Analysis:** Tempat coretan SQL _ad-hoc_ yang tidak ingin saya jadikan tabel permanen.
 - **README:** Manual panduan proyek agar kawan setim tahu cara menjalankan proyek ini.
@@ -328,7 +328,7 @@ Di tahap ini, saya belajar bahwa kita tidak boleh langsung melakukan "hard-code"
 
 ---
 
-## **4.3.2.1 - Mendefinisikan Sources dengan `sources.yml**`
+## **4.3.2.1 - Mendefinisikan Sources dengan `sources.yml`**
 
 Langkah pertama adalah membuat file YAML di dalam folder `models/staging/`. File ini adalah "peta" yang memberi tahu dbt di mana data mentah kita berada.
 
@@ -349,7 +349,7 @@ sources:
 
 ---
 
-## **4.3.2.2 - Menggunakan Fungsi `source()**`
+## **4.3.2.2 - Menggunakan Fungsi `source()`**
 
 Setelah didefinisikan di YAML, saya memanggil tabel tersebut di file SQL menggunakan Jinja macro:
 `{{ source('nama_source', 'nama_tabel') }}`
@@ -441,7 +441,7 @@ Ada dua produk utama yang biasanya dihasilkan di layer ini:
 
 ---
 
-## **4.4.1.2 - Sihir dbt: `source()` vs `ref()**`
+## **4.4.1.2 - Sihir dbt: `source()` vs `ref()`**
 
 Ini adalah perbedaan krusial yang harus diingat:
 
@@ -555,7 +555,7 @@ Pernahkah kamu menulis `CASE WHEN` yang sama di sepuluh file SQL yang berbeda? I
 
 ---
 
-## **4.4.2.4 - Persiapan "Boss Level": `fct_trips**`
+## **4.4.2.4 - Persiapan "Boss Level": `fct_trips`**
 
 Di akhir materi ini, ada tugas besar (PR) untuk membuat model `fct_trips`. Ini adalah tabel fakta utama yang menggabungkan segalanya. Hal yang harus diperhatikan:
 
