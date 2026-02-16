@@ -10,8 +10,6 @@
 
 **Objective:** Understand the behavior of the dbt selection flag (`--select`).
 
-![alt text](https://github.com/Mifaridz/de-zoomcamp2026-learning-journey/blob/main/04-analytics-engineering/Homework/Homework-image/question-1.png?raw=true)
-
 ```bash
 # Executing the command
 dbt run --select int_trips_unioned
@@ -27,10 +25,6 @@ dbt run --select int_trips_unioned
 ### Question 2. dbt Tests
 
 **Objective:** Understand how dbt handles data quality test failures.
-
-![alt text](https://github.com/Mifaridz/de-zoomcamp2026-learning-journey/blob/main/04-analytics-engineering/Homework/Homework-image/question-2.1.png?raw=true)
-
-![alt text](https://github.com/Mifaridz/de-zoomcamp2026-learning-journey/blob/main/04-analytics-engineering/Homework/Homework-image/question-2.2.png?raw=true)
 
 > **Answer:** `dbt will fail the test, returning a non-zero exit code`
 
