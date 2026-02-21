@@ -14,6 +14,7 @@ venv/
 *.csv
 *.parquet
 *.csv.gz
+*.duckdb
 
 # ===============================
 # Terraform
@@ -39,3 +40,7 @@ venv/
 .idea/
 .DS_Store
 Thumbs.db
+
+.bruin.yml
+logs/runs
+
