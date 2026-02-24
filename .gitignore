@@ -44,3 +44,5 @@ Thumbs.db
 .bruin.yml
 logs/runs
 
+
+logs/*.log

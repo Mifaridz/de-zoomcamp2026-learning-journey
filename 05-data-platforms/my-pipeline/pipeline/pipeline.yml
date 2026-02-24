@@ -1,0 +1,5 @@
+name: nyc_taxi
+schedule: monthly
+start_date: "2019-01-01"
+default_connections:
+  duckdb: duckdb-default

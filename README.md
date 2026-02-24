@@ -59,16 +59,21 @@ Mengubah data mentah menjadi data siap pakai untuk analisis.
 - Dasar-dasar **dbt (data build tool)**.
 - Data modeling (Staging, Core, Models).
 - Menjalankan pengujian data (Testing) dan dokumentasi otomatis.
-- Visualisasi data menggunakan Google Looker Studio.
+- Visualisasi data
 
-### 🔹 Modul 5: Batch Processing
+---
 
-Memproses data dalam jumlah besar secara periodik.
+### 🔹 Modul 5: Data Platforms (Bruin)
 
-- Pengenalan **Apache Spark**.
-- Manipulasi data menggunakan **PySpark**.
-- Menjalankan Spark job di local maupun di cloud (Dataproc).
-- Integrasi Spark dengan GCS dan BigQuery.
+Fokus pada pembangunan dan pengelolaan platform data modern yang mendukung pemrosesan dalam skala besar.
+
+- Konsep dan arsitektur platform data modern.
+- Pengenalan **Bruin** sebagai platform data terpusat untuk orkestrasi, penyimpanan, dan pemrosesan data.
+- Cara mengelola dataset, pipeline, serta job dalam Bruin.
+- Integrasi Bruin dengan layanan penyimpanan dan komputasi di cloud.
+- Praktik terbaik dalam manajemen data, versioning, dan monitoring pipeline.
+
+---
 
 ### 🔹 Modul 6: Stream Processing
 
@@ -90,8 +95,8 @@ Membangun proyek akhir yang mengintegrasikan semua materi dari Modul 1 sampai 6 
 | Week 2  | Workflow Orchestration                         |   ✅   | [Lihat](/02-workflow-orchestration/) |
 | Week 3  | Data Warehouse (BigQuery)                      |   ✅   |     [Lihat](/03-data-warehouse/)     |
 | Week 4  | Analytics Engineering (dbt)                    |   ✅   | [Lihat](/04-analytics-engineering/)  |
-| Week 5  | Batch Processing (Spark)                       |   🚧   |                  -                   |
-| Week 6  | Stream Processing (Kafka)                      |   📅   |                  -                   |
+| Week 5  | Data Platforms (Bruin)                         |   ✅   |     [Lihat](/05-data-platforms/)     |
+| Week 6  | Stream Processing (Kafka)                      |   🚧   |                  -                   |
 | Project | Capstone Project 1                             |   📅   |                  -                   |
 
 > _Ket: ✅ Selesai | 🚧 Sedang Dikerjakan | 📅 Rencana_
