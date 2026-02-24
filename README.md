@@ -61,8 +61,6 @@ Mengubah data mentah menjadi data siap pakai untuk analisis.
 - Menjalankan pengujian data (Testing) dan dokumentasi otomatis.
 - Visualisasi data
 
----
-
 ### 🔹 Modul 5: Data Platforms (Bruin)
 
 Fokus pada pembangunan dan pengelolaan platform data modern yang mendukung pemrosesan dalam skala besar.
@@ -72,8 +70,6 @@ Fokus pada pembangunan dan pengelolaan platform data modern yang mendukung pemro
 - Cara mengelola dataset, pipeline, serta job dalam Bruin.
 - Integrasi Bruin dengan layanan penyimpanan dan komputasi di cloud.
 - Praktik terbaik dalam manajemen data, versioning, dan monitoring pipeline.
-
----
 
 ### 🔹 Modul 6: Stream Processing
 
