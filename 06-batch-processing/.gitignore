@@ -1,0 +1,33 @@
+# --- Python & Environment ---
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.python-version
+.uv/
+
+# --- Data & Large Files (Paling Penting) ---
+# Mengabaikan seluruh isi folder data
+data/
+
+# Cadangan jika ada file data yang tercecer di luar folder data
+*.csv
+*.parquet
+*.jsonl
+*.gz
+*.zip
+*.tar
+*.tgz
+
+# --- Spark & Logs ---
+*.log
+metastore_db/
+derby.log
+checkpoint/
+.spark-stubs/
+
+# --- IDE & OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
