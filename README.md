@@ -71,15 +71,23 @@ Fokus pada pembangunan dan pengelolaan platform data modern yang mendukung pemro
 - Integrasi Bruin dengan layanan penyimpanan dan komputasi di cloud.
 - Praktik terbaik dalam manajemen data, versioning, dan monitoring pipeline.
 
-### 🔹 Modul 6: Stream Processing
+### 🔹 Modul 6: Batch Processing
+
+Mengelola pemrosesan data dalam volume besar secara berkala.
+
+- Pengenalan Apache Spark (Framework komputasi terdistribusi).
+- Operasi DataFrames dan SQL untuk manipulasi data.
+- Mekanisme internal GroupBy dan Joins (Shuffle, Partisi).
+
+### 🔹 Modul 7: Stream Processing
 
 Mengelola aliran data secara real-time.
 
 - Arsitektur **Kafka** (Producer, Consumer, Topics).
-- Pengenalan Kafka Connect dan KSQL.
-- Implementasi streaming data sederhana.
+- Operasi Kafka Streams dan KSQL untuk pemrosesan data.
+- Manajemen Schema dengan Avro (Serialisasi dan evolusi data).
 
-### 🔹 Modul 7 : Capstone Project
+### 🔹 Capstone Project
 
 Membangun proyek akhir yang mengintegrasikan semua materi dari Modul 1 sampai 6 untuk menyelesaikan masalah data di dunia nyata.
 
@@ -92,7 +100,8 @@ Membangun proyek akhir yang mengintegrasikan semua materi dari Modul 1 sampai 6 
 | Week 3  | Data Warehouse (BigQuery)                      |   ✅   |     [Lihat](/03-data-warehouse/)     |
 | Week 4  | Analytics Engineering (dbt)                    |   ✅   | [Lihat](/04-analytics-engineering/)  |
 | Week 5  | Data Platforms (Bruin)                         |   ✅   |     [Lihat](/05-data-platforms/)     |
-| Week 6  | Stream Processing (Kafka)                      |   🚧   |                  -                   |
+| Week 6  | Batch Processing (Spark)                       |   ✅   |    [Lihat](/06-batch-processing/)    |
+| Week 7  | Stream Processing (Kafka)                      |   ✅   |       [Lihat](/07-streaming/)        |
 | Project | Capstone Project 1                             |   📅   |                  -                   |
 
 > _Ket: ✅ Selesai | 🚧 Sedang Dikerjakan | 📅 Rencana_
