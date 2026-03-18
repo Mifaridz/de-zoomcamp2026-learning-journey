@@ -4,8 +4,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-import psycopg2
-from kafka import KafkaConsumer
+import psycopg2 # type: ignore
+from kafka import KafkaConsumer # pyright: ignore[reportMissingImports]
 from models import ride_deserializer
 
 server = 'localhost:9092'

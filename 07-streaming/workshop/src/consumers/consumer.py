@@ -4,7 +4,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from kafka import KafkaConsumer
+from kafka import KafkaConsumer # pyright: ignore[reportMissingImports]
 from models import ride_deserializer
 
 server = 'localhost:9092'

@@ -8,7 +8,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from kafka import KafkaProducer
+from kafka import KafkaProducer # pyright: ignore[reportMissingImports]
 from models import Ride
 
 # Top pickup locations from the actual NYC yellow taxi data.

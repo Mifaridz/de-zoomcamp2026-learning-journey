@@ -1,5 +1,5 @@
-from pyflink.datastream import StreamExecutionEnvironment
-from pyflink.table import EnvironmentSettings, StreamTableEnvironment
+from pyflink.datastream import StreamExecutionEnvironment # pyright: ignore[reportMissingImports]
+from pyflink.table import EnvironmentSettings, StreamTableEnvironment   # pyright: ignore[reportMissingImports]
 
 
 def create_processed_events_sink_postgres(t_env):
